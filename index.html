@@ -1,74 +1,85 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>TV Mercado Grid</title>
-
-<style>
-html, body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    overflow: hidden;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    width: 100vw;
-    height: 100vh;
-}
-
-.panel {
-    border: 1px solid #111;
-    overflow: hidden;
-    background: #000;
-}
-
-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: #000;
-}
-</style>
+    <meta charset="UTF-8">
+    <title>Cerebro TV Mercado</title>
+    <style>
+        body {
+            background: #111;
+            color: white;
+            font-family: sans-serif;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 { margin-bottom: 10px; }
+        p { color: #aaa; margin-bottom: 30px; }
+        button {
+            padding: 20px 40px;
+            font-size: 24px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        button:hover { background: #0056b3; }
+    </style>
 </head>
-
 <body>
 
-<div class="grid">
+    <h1>Cerebro de Rotación</h1>
+    <p>Mantené esta página abierta. Al iniciar, se abrirá una pestaña nueva que rotará automáticamente.</p>
+    
+    <button onclick="iniciarRotacion()">Iniciar Pantalla de TV</button>
 
-    <div class="panel">
-        <iframe
-            src="https://matbarofex.primary.ventures/futuros/financieros"
-            loading="eager">
-        </iframe>
-    </div>
+    <script>
+        // Array con las 4 webs que querés mostrar
+        const urls = [
+            "https://matbarofex.primary.ventures/futuros/financieros",
+            "https://cem.matbarofex.com.ar/",
+            "https://matbarofex.primary.ventures/tiva/bonos",
+            "https://marketdata.mae.com.ar/dashboard-tv/bcr"
+        ];
+        
+        let indiceActual = 0;
+        let ventanaTV = null;
 
-    <div class="panel">
-        <iframe
-            src="https://cem.matbarofex.com.ar/"
-            loading="eager">
-        </iframe>
-    </div>
+        function rotarUrls() {
+            // Si la ventana no existe o alguien la cerró, la volvemos a crear
+            if (!ventanaTV || ventanaTV.closed) {
+                // Abre una nueva pestaña/ventana
+                ventanaTV = window.open(urls[indiceActual], "PantallaTV");
+            } else {
+                // Si la ventana ya está abierta, solo le cambiamos la URL internamente
+                ventanaTV.location.href = urls[indiceActual];
+            }
+            
+            // Pasamos a la siguiente URL
+            indiceActual++;
+            // Si llegamos al final de la lista, volvemos a empezar
+            if (indiceActual >= urls.length) {
+                indiceActual = 0;
+            }
+        }
 
-    <div class="panel">
-        <iframe
-            src="https://matbarofex.primary.ventures/tiva/bonos"
-            loading="eager">
-        </iframe>
-    </div>
-
-    <div class="panel">
-        <iframe
-            src="https://marketdata.mae.com.ar/dashboard-tv/bcr"
-            loading="eager">
-        </iframe>
-    </div>
-
-</div>
+        function iniciarRotacion() {
+            // Ejecutamos el primer cambio inmediatamente
+            rotarUrls();
+            
+            // Configuramos el temporizador para que repita cada 20 segundos (20000 ms)
+            setInterval(rotarUrls, 20000);
+            
+            // Cambiamos el texto del botón para dar feedback
+            document.querySelector('button').innerText = "Rotación en curso...";
+            document.querySelector('button').style.background = "#28a745";
+        }
+    </script>
 
 </body>
 </html>

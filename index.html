@@ -34,12 +34,11 @@
 <body>
 
     <h1>Cerebro de Rotación</h1>
-    <p>Mantené esta página abierta. Al iniciar, se abrirá una pestaña nueva que rotará automáticamente.</p>
+    <p>Mantené esta página abierta. Al iniciar, se abrirá/actualizará una pestaña nueva con el dashboard.</p>
     
     <button onclick="iniciarRotacion()">Iniciar Pantalla de TV</button>
 
     <script>
-        // Array con las 4 webs que querés mostrar
         const urls = [
             "https://matbarofex.primary.ventures/futuros/financieros",
             "https://cem.matbarofex.com.ar/",
@@ -48,36 +47,31 @@
         ];
         
         let indiceActual = 0;
-        let ventanaTV = null;
 
         function rotarUrls() {
-            // Si la ventana no existe o alguien la cerró, la volvemos a crear
-            if (!ventanaTV || ventanaTV.closed) {
-                // Abre una nueva pestaña/ventana
-                ventanaTV = window.open(urls[indiceActual], "PantallaTV");
-            } else {
-                // Si la ventana ya está abierta, solo le cambiamos la URL internamente
-                ventanaTV.location.href = urls[indiceActual];
-            }
+            // EL TRUCO MAGICO: 
+            // En vez de intentar modificar la ventana (que da error de seguridad),
+            // le decimos al navegador que abra la URL en la misma pestaña llamada "PantallaTV".
+            // Esto recicla la pestaña abierta saltándose el bloqueo.
+            window.open(urls[indiceActual], "PantallaTV");
             
-            // Pasamos a la siguiente URL
             indiceActual++;
-            // Si llegamos al final de la lista, volvemos a empezar
             if (indiceActual >= urls.length) {
                 indiceActual = 0;
             }
         }
 
         function iniciarRotacion() {
-            // Ejecutamos el primer cambio inmediatamente
+            // Primer salto
             rotarUrls();
             
-            // Configuramos el temporizador para que repita cada 20 segundos (20000 ms)
+            // Loop cada 20 segundos
             setInterval(rotarUrls, 20000);
             
-            // Cambiamos el texto del botón para dar feedback
-            document.querySelector('button').innerText = "Rotación en curso...";
-            document.querySelector('button').style.background = "#28a745";
+            // Feedback visual
+            const btn = document.querySelector('button');
+            btn.innerText = "Rotando... (Mirá la otra pestaña)";
+            btn.style.background = "#28a745";
         }
     </script>
 

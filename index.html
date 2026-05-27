@@ -2,21 +2,73 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="20; url=page2.html">
-<title>TV Mercado</title>
+<title>TV Mercado Grid</title>
+
 <style>
-html,body{
-  margin:0;
-  height:100%;
-  background:black;
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: 100vw;
+    height: 100vh;
+}
+
+.panel {
+    border: 1px solid #111;
+    overflow: hidden;
+    background: #000;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #000;
 }
 </style>
 </head>
+
 <body>
 
-<script>
-window.location.replace("https://matbarofex.primary.ventures/futuros/financieros");
-</script>
+<div class="grid">
+
+    <div class="panel">
+        <iframe
+            src="https://matbarofex.primary.ventures/futuros/financieros"
+            loading="eager">
+        </iframe>
+    </div>
+
+    <div class="panel">
+        <iframe
+            src="https://cem.matbarofex.com.ar/"
+            loading="eager">
+        </iframe>
+    </div>
+
+    <div class="panel">
+        <iframe
+            src="https://matbarofex.primary.ventures/tiva/bonos"
+            loading="eager">
+        </iframe>
+    </div>
+
+    <div class="panel">
+        <iframe
+            src="https://marketdata.mae.com.ar/dashboard-tv/bcr"
+            loading="eager">
+        </iframe>
+    </div>
+
+</div>
 
 </body>
 </html>

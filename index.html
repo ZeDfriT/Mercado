@@ -4,27 +4,6 @@
 <meta charset="UTF-8">
 <title>TV Mercado</title>
 
-<style>
-html, body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: black;
-}
-
-iframe {
-    width: 100vw;
-    height: 100vh;
-    border: none;
-}
-</style>
-</head>
-
-<body>
-
-<iframe id="viewer"></iframe>
-
 <script>
 const urls = [
   "https://matbarofex.primary.ventures/futuros/financieros",
@@ -34,17 +13,30 @@ const urls = [
   "https://marketdata.mae.com.ar/dashboard-tv/bcr"
 ];
 
-let i = 0;
-const viewer = document.getElementById("viewer");
+const interval = 20; // segundos
 
-function rotate() {
-    viewer.src = urls[i];
-    i = (i + 1) % urls.length;
+function getCurrentIndex() {
+  const params = new URLSearchParams(window.location.search);
+  return parseInt(params.get("page") || "0", 10);
 }
 
-rotate();
-setInterval(rotate, 20000);
+const index = getCurrentIndex();
+const next = (index + 1) % urls.length;
+
+// Programamos el siguiente cambio antes de irnos
+setTimeout(() => {
+  window.location.href =
+    window.location.origin +
+    window.location.pathname +
+    "?page=" + next;
+}, interval * 1000);
+
+// Abrimos la URL actual
+window.location.replace(urls[index]);
+
 </script>
 
+</head>
+<body style="margin:0;background:black;">
 </body>
 </html>
